@@ -12,6 +12,7 @@ Assembly uber jar
 
 `$ sbt assembly`
 
-Assembly test-jar 
 
-`$ sbt test:assembly`
+## Integration testing
+
+TBD
