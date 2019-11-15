@@ -1,6 +1,5 @@
 steps:
 
-
   - name: 'gcr.io/cloud-builders/gsutil'
     entrypoint: 'sh'
     id: 'Copy sbt cache'
