@@ -20,7 +20,7 @@ steps:
     id: 'Upload'
     args: [
       'cp',
-      '/workspace/target/scala-2.11/*-assembly.jar',
+      'target/scala-2.11/*-assembly.jar',
       'gs://${PROJECT_ID}-repository/${REPO_NAME}/${BRANCH_NAME}/${SHORT_SHA}/spark/'
     ]
 
