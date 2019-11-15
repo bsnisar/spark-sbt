@@ -1,0 +1,29 @@
+steps:
+    # sync sbt cache
+  - name: 'gcr.io/cloud-builders/gsutil'
+    entrypoint: 'sh'
+    id: 'Copy sbt cache'
+    args: ['-c', 'gsutil -m cp -r gs://${PROJECT_ID}-repository/${REPO_NAME}/cloudbuild/cache/.sbt-home /cache || true']
+    volumes:
+      - path: '/cache/.sbt-home
+      name: 'sbt_cache_new'
+    waitFor: ['-']
+
+    # sync ivy cache
+  - name: 'gcr.io/cloud-builders/gsutil'
+    entrypoint: 'sh'
+    id: 'Copy Ivy cache'
+    args: ['-c', 'gsutil -m cp -r gs://${PROJECT_ID}-repository/${REPO_NAME}/cloudbuild/cache/.ivy2 /cache || true']
+    volumes:
+      - path: '/cache/.ivy2
+      name: 'ivy2_cache_new'
+    waitFor: ['-']
+
+  # Compile and Unit Tests
+  - name: 'mozilla/sbt:8u212_1.2.8'
+    args: ['-Dsbt.global.base=/cache/.sbt-home', '-Dsbt.ivy.home=/cache/.ivy2', 'assembly']
+    volumes:
+      - path: '/cache/.sbt-home'
+        name: 'sbt_cache_new'
+      - path: '/cache/.ivy2'
+        name: 'ivy2_cache_new'
