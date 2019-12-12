@@ -1,0 +1,16 @@
+{
+  "bucket": "ex_bucket-444",
+  "repository": "spark-sbt",
+  "components": {
+
+    "main": {
+      "type": "sparkJob",
+      "assets": [
+        {
+          "glob": "./target/scala-2.11/*assembly*.jar"
+        }
+      ]
+    }
+
+  }
+}

@@ -1,37 +1,5 @@
 steps:
 
-  - name: 'gcr.io/cloud-builders/gsutil'
-    entrypoint: 'sh'
-    id: 'Copy sbt cache'
-    args: ['-c', 'gsutil -m cp -r gs://${PROJECT_ID}-repository/${REPO_NAME}/cb/cache/.sbt-home /cache || true']
-    volumes:
-      - path: '/cache/.sbt-home'
-        name: 'sbt_cache_new'
-    waitFor: ['-']
-
   - name: 'mozilla/sbt:8u212_1.2.8'
     args: ['sbt', '-Dsbt.global.base=/cache/.sbt-home', 'assembly']
-    volumes:
-      - path: '/cache/.sbt-home'
-        name: 'sbt_cache_new'
 
-  - name: 'gcr.io/cloud-builders/gsutil'
-    id: 'Upload'
-    args: [
-      'cp',
-      'target/scala-2.11/*-assembly.jar',
-      'gs://${PROJECT_ID}-repository/${REPO_NAME}/${BRANCH_NAME}/${SHORT_SHA}/spark/'
-    ]
-
-  - name: 'gcr.io/cloud-builders/gsutil'
-    entrypoint: 'sh'
-    id: 'Copy cache back'
-    args: ['-c', 'gsutil -m cp -r /cache/.sbt-home gs://${PROJECT_ID}-repository/${REPO_NAME}/cb/cache/.sbt-home  || true']
-    volumes:
-      - path: '/cache/.sbt-home'
-        name: 'sbt_cache_new'
-
-
-images: [
-  'mozilla/sbt:8u212_1.2.8'
-]
